@@ -12,9 +12,10 @@
     <string name="language_option_ko">&#54620;&#44397;&#50612;</string>
     <string name="play_setting_title">再生</string>
     <string name="auto_play_next_title">次の動画を自動再生</string>
+    <string name="random_play_on_start_title">アプリ起動時にランダムな動画を再生</string>
     <string name="about_title">アプリについて</string>
     <string name="privacy_entry">プライバシー</string>
-    <string name="privacy_content">このアプリは動画ファイルをローカルで読み込むだけで、動画や個人情報をアップロード・収集することはありません。</string>
+    <string name="privacy_content">このアプリは動画をローカルで読み込みます。システムの再生通知と、対応端末での OPPO Fluid Cloud を提供するため、現在のメディアタイトル、再生位置、ローカルメディア識別子が端末のシステムサービスに送信される場合があります。アプリ自体が動画ファイルをアップロードすることはありません。</string>
     <string name="version_entry">バージョン情報</string>
     <string name="version_format">バージョン %1$s</string>
     <string name="license_entry">オープンソースライセンス</string>

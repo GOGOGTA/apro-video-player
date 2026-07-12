@@ -12,9 +12,10 @@
     <string name="language_option_ko">&#54620;&#44397;&#50612;</string>
     <string name="play_setting_title">播放</string>
     <string name="auto_play_next_title">自动播放下一个视频</string>
+    <string name="random_play_on_start_title">每次打开 App 时随机播放视频</string>
     <string name="about_title">关于</string>
     <string name="privacy_entry">隐私说明</string>
-    <string name="privacy_content">本 App 仅在本地读取视频文件，不上传、不收集用户视频或个人隐私数据。</string>
+    <string name="privacy_content">本 App 在本地读取视频文件。为提供系统播放通知及受支持设备上的 OPPO 流体云功能，当前媒体标题、播放进度和本地媒体标识可能会发送给设备系统服务；App 本身不上传视频文件。</string>
     <string name="version_entry">版本信息</string>
     <string name="version_format">版本 %1$s</string>
     <string name="license_entry">开源许可</string>

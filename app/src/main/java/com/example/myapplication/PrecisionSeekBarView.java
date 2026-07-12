@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
@@ -51,6 +52,8 @@ public class PrecisionSeekBarView extends View {
     private final Paint activeTrackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint thumbPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final RectF trackRect = new RectF();
+    private final RectF bufferedRect = new RectF();
+    private final RectF activeRect = new RectF();
     private final float density;
     private final int touchSlop;
 
@@ -212,14 +215,14 @@ public class PrecisionSeekBarView extends View {
         if (durationMs > 0L) {
             float bufferedRight = positionToX(bufferedPositionMs);
             if (bufferedRight > left) {
-                RectF bufferedRect = new RectF(left, trackRect.top, bufferedRight, trackRect.bottom);
+                bufferedRect.set(left, trackRect.top, bufferedRight, trackRect.bottom);
                 canvas.drawRoundRect(bufferedRect, radius, radius, bufferedTrackPaint);
             }
 
             long displayedPositionMs = getDisplayedPositionMs();
             float activeRight = positionToX(displayedPositionMs);
             if (activeRight > left) {
-                RectF activeRect = new RectF(left, trackRect.top, activeRight, trackRect.bottom);
+                activeRect.set(left, trackRect.top, activeRight, trackRect.bottom);
                 canvas.drawRoundRect(activeRect, radius, radius, activeTrackPaint);
             }
 
@@ -253,7 +256,11 @@ public class PrecisionSeekBarView extends View {
                 if (!scrubbing) {
                     return false;
                 }
+                boolean wasTap = !movedEnough;
                 finishTracking(event, false);
+                if (wasTap) {
+                    performClick();
+                }
                 return true;
             case MotionEvent.ACTION_CANCEL:
                 if (!scrubbing) {
@@ -264,6 +271,12 @@ public class PrecisionSeekBarView extends View {
             default:
                 return super.onTouchEvent(event);
         }
+    }
+
+    @Override
+    public boolean performClick() {
+        super.performClick();
+        return true;
     }
 
     private void beginTracking(@NonNull MotionEvent event) {
@@ -407,18 +420,25 @@ public class PrecisionSeekBarView extends View {
         boolean atEnd = durationMs > 0L && durationMs - positionMs <= EDGE_FEEDBACK_WINDOW_MS;
 
         if (atStart && !startEdgeFeedbackSent) {
-            performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE);
+            performEdgeHapticFeedback();
             startEdgeFeedbackSent = true;
         } else if (!atStart) {
             startEdgeFeedbackSent = false;
         }
 
         if (atEnd && !endEdgeFeedbackSent) {
-            performHapticFeedback(HapticFeedbackConstants.TEXT_HANDLE_MOVE);
+            performEdgeHapticFeedback();
             endEdgeFeedbackSent = true;
         } else if (!atEnd) {
             endEdgeFeedbackSent = false;
         }
+    }
+
+    private void performEdgeHapticFeedback() {
+        int feedbackConstant = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1
+                ? HapticFeedbackConstants.TEXT_HANDLE_MOVE
+                : HapticFeedbackConstants.CLOCK_TICK;
+        performHapticFeedback(feedbackConstant);
     }
 
     private boolean isTouchOnTrack(float y) {

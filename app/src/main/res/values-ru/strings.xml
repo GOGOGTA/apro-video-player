@@ -25,4 +25,6 @@
     <string name="widget_device_format">Устройство: %1$s</string>
     <string name="widget_cast_tips">Вход для трансляции зарезервирован</string>
     <string name="widget_lyrics_tips">Панель текста песни ожидает подключения</string>
+    <string name="video_thumbnail">Миниатюра видео</string>
+    <string name="hide_video_action">Скрыть видео %1$s</string>
 </resources>

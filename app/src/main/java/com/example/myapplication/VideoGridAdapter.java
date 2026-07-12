@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class VideoGridAdapter extends RecyclerView.Adapter<VideoGridAdapter.GridViewHolder> {
@@ -39,7 +40,6 @@ public class VideoGridAdapter extends RecyclerView.Adapter<VideoGridAdapter.Grid
 
     private static final long LONG_PRESS_DELAY = 450;
     private static final float DRAG_THRESHOLD = 12f;
-    private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     /* ==================== 构造 & Setter ==================== */
 
@@ -70,6 +70,12 @@ public class VideoGridAdapter extends RecyclerView.Adapter<VideoGridAdapter.Grid
     @Override
     public int getItemCount() {
         return videoList.size();
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull GridViewHolder holder) {
+        holder.cancelPendingInteraction();
+        super.onViewRecycled(holder);
     }
 
     /* ==================== 数据操作 ==================== */
@@ -119,6 +125,12 @@ public class VideoGridAdapter extends RecyclerView.Adapter<VideoGridAdapter.Grid
             super(itemView);
             ivThumbnail     = itemView.findViewById(R.id.ivThumbnail);
             selectedOverlay = itemView.findViewById(R.id.selectedOverlay);
+            ivThumbnail.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onItemClick(position);
+                }
+            });
         }
 
         void bind(VideoItem item, int position) {
@@ -128,19 +140,27 @@ public class VideoGridAdapter extends RecyclerView.Adapter<VideoGridAdapter.Grid
             /* ---------- 缩略图 ---------- */
             String path = item.getPath();
             ivThumbnail.setTag(path);
+            String itemName = item.getName();
+            ivThumbnail.setContentDescription(
+                    itemName == null || itemName.trim().isEmpty()
+                            ? itemView.getContext().getString(R.string.video_thumbnail)
+                            : itemName
+            );
 
             Bitmap cached = ThumbnailCacheManager.getInstance().getCached(path);
             if (cached != null) {
                 ivThumbnail.setImageBitmap(cached);
             } else {
                 ivThumbnail.setImageResource(android.R.color.darker_gray);
+                WeakReference<ImageView> thumbnailRef = new WeakReference<>(ivThumbnail);
                 ThumbnailCacheManager.getInstance().loadAsync(
                         itemView.getContext(), path, (loadedPath, bitmap) -> {
-                            mainHandler.post(() -> {
-                                if (loadedPath.equals(ivThumbnail.getTag()) && bitmap != null) {
-                                    ivThumbnail.setImageBitmap(bitmap);
-                                }
-                            });
+                            ImageView thumbnail = thumbnailRef.get();
+                            if (thumbnail != null
+                                    && loadedPath.equals(thumbnail.getTag())
+                                    && bitmap != null) {
+                                thumbnail.setImageBitmap(bitmap);
+                            }
                         });
             }
 
@@ -198,7 +218,7 @@ public class VideoGridAdapter extends RecyclerView.Adapter<VideoGridAdapter.Grid
 
                         if (!longPressTriggered) {
                             /* ---- 普通短按 → 跳转播放 ---- */
-                            if (listener != null) listener.onItemClick(pos);
+                            v.performClick();
                         }
                         resetScale();
                         return true;
@@ -220,6 +240,15 @@ public class VideoGridAdapter extends RecyclerView.Adapter<VideoGridAdapter.Grid
 
         private void resetScale() {
             itemView.animate().scaleX(1f).scaleY(1f).setDuration(150).start();
+        }
+
+        private void cancelPendingInteraction() {
+            longPressHandler.removeCallbacksAndMessages(null);
+            itemView.animate().cancel();
+            itemView.setScaleX(1f);
+            itemView.setScaleY(1f);
+            longPressTriggered = false;
+            dragStarted = false;
         }
 
         private void vibrateShort(Context context) {

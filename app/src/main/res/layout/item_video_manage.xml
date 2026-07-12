@@ -23,6 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:clickable="true"
+                android:contentDescription="@string/video_thumbnail"
                 android:focusable="true"
                 android:scaleType="centerCrop" />
 
@@ -58,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="X"
+                android:text="@string/hide_symbol"
                 android:textColor="@color/delete_red"
                 android:textSize="12sp"
                 android:textStyle="bold" />

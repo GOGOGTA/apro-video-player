@@ -25,4 +25,11 @@
     <string name="widget_lyrics_tips">&#27468;&#35789;&#38754;&#26495;&#24453;&#25509;&#20837;</string>
     <string name="playback_channel_name">&#38145;&#23631;&#25773;&#25918;&#25511;&#21046;</string>
     <string name="playback_channel_desc">&#22312;&#38145;&#23631;&#26174;&#31034;&#24403;&#21069;&#25773;&#25918;&#20449;&#24687;&#19982;&#24555;&#25463;&#25805;&#20316;</string>
+    <string name="video_thumbnail">视频缩略图</string>
+    <string name="hide_video_action">隐藏视频 %1$s</string>
+    <string name="seek_time_format" translatable="false">%1$s / %2$s</string>
+    <string name="seek_time_placeholder" translatable="false">00:00 / 00:00</string>
+    <string name="speed_feedback_2x" translatable="false">2x</string>
+    <string name="navigation_chevron" translatable="false">&gt;</string>
+    <string name="hide_symbol" translatable="false">X</string>
 </resources>

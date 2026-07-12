@@ -10,27 +10,53 @@ public class HiddenVideosManager {
 
     private static final String PREF_NAME = "hidden_videos";
     private static final String KEY_HIDDEN = "hidden_set";
+    private static final Object PREF_LOCK = new Object();
     private final SharedPreferences prefs;
-    private Set<String> hiddenCache;
 
     public HiddenVideosManager(Context context) {
-        prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        hiddenCache = new HashSet<>(prefs.getStringSet(KEY_HIDDEN, new HashSet<>()));
+        Context appContext = context.getApplicationContext();
+        Context safeContext = appContext != null ? appContext : context;
+        prefs = safeContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
     public void hide(String path) {
-        if (hiddenCache.add(path)) {
-            prefs.edit().putStringSet(KEY_HIDDEN, new HashSet<>(hiddenCache)).apply();
+        if (path == null) {
+            return;
+        }
+        synchronized (PREF_LOCK) {
+            Set<String> hiddenPaths = readHiddenPaths();
+            if (hiddenPaths.add(path)) {
+                prefs.edit().putStringSet(KEY_HIDDEN, hiddenPaths).apply();
+            }
         }
     }
 
     public boolean isHidden(String path) {
-        return hiddenCache.contains(path);
+        if (path == null) {
+            return false;
+        }
+        synchronized (PREF_LOCK) {
+            Set<String> storedPaths = prefs.getStringSet(KEY_HIDDEN, null);
+            return storedPaths != null && storedPaths.contains(path);
+        }
     }
 
     public void unhide(String path) {
-        if (hiddenCache.remove(path)) {
-            prefs.edit().putStringSet(KEY_HIDDEN, new HashSet<>(hiddenCache)).apply();
+        if (path == null) {
+            return;
         }
+        synchronized (PREF_LOCK) {
+            Set<String> hiddenPaths = readHiddenPaths();
+            if (hiddenPaths.remove(path)) {
+                prefs.edit().putStringSet(KEY_HIDDEN, hiddenPaths).apply();
+            }
+        }
+    }
+
+    private Set<String> readHiddenPaths() {
+        Set<String> storedPaths = prefs.getStringSet(KEY_HIDDEN, null);
+        return storedPaths == null
+                ? new HashSet<>()
+                : new HashSet<>(storedPaths);
     }
 }

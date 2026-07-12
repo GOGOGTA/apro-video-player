@@ -25,4 +25,6 @@
     <string name="widget_device_format">기기: %1$s</string>
     <string name="widget_cast_tips">캐스트 진입점이 예약되어 있습니다</string>
     <string name="widget_lyrics_tips">가사 패널은 연동 예정입니다</string>
+    <string name="video_thumbnail">동영상 미리보기 이미지</string>
+    <string name="hide_video_action">동영상 %1$s 숨기기</string>
 </resources>

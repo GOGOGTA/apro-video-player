@@ -139,6 +139,29 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/rowRandomPlayOnStart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/random_play_on_start_title"
+                        android:textColor="@color/md_on_surface_dark"
+                        android:textSize="14sp" />
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switchRandomPlayOnStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
             </LinearLayout>
 
             <!-- 卡片：关于 -->
@@ -182,7 +205,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=">"
+                        android:text="@string/navigation_chevron"
                         android:textColor="@color/md_on_surface_variant_dark"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -235,7 +258,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=">"
+                        android:text="@string/navigation_chevron"
                         android:textColor="@color/md_on_surface_variant_dark"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -263,7 +286,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=">"
+                        android:text="@string/navigation_chevron"
                         android:textColor="@color/md_on_surface_variant_dark"
                         android:textSize="14sp" />
                 </LinearLayout>

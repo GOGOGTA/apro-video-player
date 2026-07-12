@@ -27,8 +27,16 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    // The app offers an in-app language switcher, so every locale must remain
+    // available after Play delivers an Android App Bundle.
+    bundle {
+        language {
+            enableSplit = false
+        }
     }
 }
 

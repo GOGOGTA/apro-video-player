@@ -12,9 +12,10 @@
     <string name="language_option_ko">&#54620;&#44397;&#50612;</string>
     <string name="play_setting_title">Воспроизведение</string>
     <string name="auto_play_next_title">Автовоспроизведение следующего видео</string>
+    <string name="random_play_on_start_title">Воспроизводить случайное видео при запуске приложения</string>
     <string name="about_title">О приложении</string>
     <string name="privacy_entry">Конфиденциальность</string>
-    <string name="privacy_content">Это приложение только читает видеофайлы локально. Оно не загружает и не собирает ваши видео или личные данные.</string>
+    <string name="privacy_content">Приложение читает видеофайлы локально. Для системного уведомления о воспроизведении и OPPO Fluid Cloud на поддерживаемых устройствах название текущего файла, ход воспроизведения и локальный идентификатор медиа могут передаваться системным службам устройства. Само приложение не загружает видеофайлы.</string>
     <string name="version_entry">Версия</string>
     <string name="version_format">Версия %1$s</string>
     <string name="license_entry">Лицензии открытого ПО</string>

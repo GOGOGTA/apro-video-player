@@ -6,10 +6,11 @@ import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
-import android.util.LruCache;
-import android.util.Size;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
+import android.util.LruCache;
+import android.util.Size;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ThumbnailCacheManager {
+
+    private static final String TAG = "ThumbnailCache";
+    private static final int THUMBNAIL_SIZE_PX = 200;
 
     public interface Callback {
         void onLoaded(String path, Bitmap bitmap);
@@ -38,7 +42,7 @@ public class ThumbnailCacheManager {
         memoryCache = new LruCache<String, Bitmap>(cacheSize) {
             @Override
             protected int sizeOf(String key, Bitmap bitmap) {
-                return bitmap.getByteCount() / 1024;
+                return Math.max(1, bitmap.getByteCount() / 1024);
             }
         };
 
@@ -65,7 +69,8 @@ public class ThumbnailCacheManager {
         }
 
         // Use the application context so a queued task can't leak the calling Activity.
-        Context appContext = context.getApplicationContext();
+        Context applicationContext = context.getApplicationContext();
+        Context appContext = applicationContext != null ? applicationContext : context;
 
         synchronized (inFlightCallbacks) {
             List<Callback> callbacks = inFlightCallbacks.get(path);
@@ -107,21 +112,62 @@ public class ThumbnailCacheManager {
             // Android 10+ 优先使用系统缩略图
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 ContentResolver resolver = context.getContentResolver();
-                return resolver.loadThumbnail(uri, new Size(200, 200), null);
+                return resolver.loadThumbnail(
+                        uri,
+                        new Size(THUMBNAIL_SIZE_PX, THUMBNAIL_SIZE_PX),
+                        null
+                );
             }
 
             // 旧版本兜底
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
             try {
                 retriever.setDataSource(context, uri);
-                return retriever.getFrameAtTime(0, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                    return retriever.getScaledFrameAtTime(
+                            0,
+                            MediaMetadataRetriever.OPTION_CLOSEST_SYNC,
+                            THUMBNAIL_SIZE_PX,
+                            THUMBNAIL_SIZE_PX
+                    );
+                }
+                Bitmap frame = retriever.getFrameAtTime(
+                        0,
+                        MediaMetadataRetriever.OPTION_CLOSEST_SYNC
+                );
+                return scaleDown(frame);
             } finally {
                 retriever.release();
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            // Missing/deleted media and revoked partial access are expected cache misses.
+            Log.d(TAG, "Unable to create a video thumbnail");
             return null;
         }
+    }
+
+    private Bitmap scaleDown(Bitmap bitmap) {
+        if (bitmap == null) {
+            return null;
+        }
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int largestSide = Math.max(width, height);
+        if (largestSide <= THUMBNAIL_SIZE_PX || width <= 0 || height <= 0) {
+            return bitmap;
+        }
+
+        float scale = (float) THUMBNAIL_SIZE_PX / (float) largestSide;
+        Bitmap scaled = Bitmap.createScaledBitmap(
+                bitmap,
+                Math.max(1, Math.round(width * scale)),
+                Math.max(1, Math.round(height * scale)),
+                true
+        );
+        if (scaled != bitmap) {
+            bitmap.recycle();
+        }
+        return scaled;
     }
 }

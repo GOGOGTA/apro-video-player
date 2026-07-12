@@ -25,4 +25,6 @@
     <string name="widget_device_format">デバイス：%1$s</string>
     <string name="widget_cast_tips">キャスト入口は予約済みです</string>
     <string name="widget_lyrics_tips">歌詞パネルは未接続です</string>
+    <string name="video_thumbnail">動画のサムネイル</string>
+    <string name="hide_video_action">動画「%1$s」を非表示</string>
 </resources>

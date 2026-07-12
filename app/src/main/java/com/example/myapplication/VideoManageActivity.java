@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -28,6 +29,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class VideoManageActivity extends AppCompatActivity {
+
+    private static final String TAG = "VideoManageActivity";
 
     private final List<VideoItem> videoList = new ArrayList<>();
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -53,10 +56,12 @@ public class VideoManageActivity extends AppCompatActivity {
     private static final class VideoLoadResult {
         final List<VideoItem> videos;
         final long totalBytes;
+        final boolean successful;
 
-        VideoLoadResult(List<VideoItem> videos, long totalBytes) {
+        VideoLoadResult(List<VideoItem> videos, long totalBytes, boolean successful) {
             this.videos = videos;
             this.totalBytes = totalBytes;
+            this.successful = successful;
         }
     }
 
@@ -87,7 +92,6 @@ public class VideoManageActivity extends AppCompatActivity {
             videoList.remove(position);
             totalVideoBytes = Math.max(0L, totalVideoBytes - Math.max(0L, removed.getSizeBytes()));
             adapter.notifyItemRemoved(position);
-            adapter.notifyItemRangeChanged(position, videoList.size());
             videoOrderManager.saveOrder(videoList);
             updateCount();
             changed = true;
@@ -127,6 +131,9 @@ public class VideoManageActivity extends AppCompatActivity {
                 if (destroyed || generation != loadGeneration) {
                     return;
                 }
+                if (!result.successful) {
+                    return;
+                }
                 videoList.clear();
                 videoList.addAll(result.videos);
                 totalVideoBytes = result.totalBytes;
@@ -139,6 +146,7 @@ public class VideoManageActivity extends AppCompatActivity {
     private VideoLoadResult queryVisibleVideos() {
         List<VideoItem> loadedVideos = new ArrayList<>();
         long totalBytes = 0L;
+        boolean successful = false;
         ContentResolver contentResolver = getContentResolver();
         Uri collection = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
         String[] projection = {
@@ -155,6 +163,7 @@ public class VideoManageActivity extends AppCompatActivity {
                 MediaStore.Video.Media.DATE_ADDED + " DESC"
         )) {
             if (cursor != null) {
+                successful = true;
                 int idIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID);
                 int nameIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME);
                 int sizeIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE);
@@ -170,11 +179,11 @@ public class VideoManageActivity extends AppCompatActivity {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.w(TAG, "Unable to query videos from MediaStore", e);
         }
 
         applySavedOrder(loadedVideos);
-        return new VideoLoadResult(loadedVideos, totalBytes);
+        return new VideoLoadResult(loadedVideos, totalBytes, successful);
     }
 
     private void applySavedOrder(List<VideoItem> loadedVideos) {

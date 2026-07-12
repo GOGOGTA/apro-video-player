@@ -25,4 +25,6 @@
     <string name="widget_device_format">Device: %1$s</string>
     <string name="widget_cast_tips">Cast entry reserved</string>
     <string name="widget_lyrics_tips">Lyrics panel pending integration</string>
+    <string name="video_thumbnail">Video thumbnail</string>
+    <string name="hide_video_action">Hide video %1$s</string>
 </resources>

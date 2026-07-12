@@ -1,56 +1,78 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.util.AtomicFile;
+import android.util.Log;
+
 import org.json.JSONArray;
-import java.io.*;
-import java.util.*;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VideoOrderManager {
+
+    private static final String TAG = "VideoOrderManager";
     private static final String FILE_NAME = "video_order.json";
-    private final File orderFile;
-    private List<String> cachedOrder = new ArrayList<>();
-    private long cachedLastModified = -1L;
+
+    private final AtomicFile orderFile;
 
     public VideoOrderManager(Context context) {
-        orderFile = new File(context.getFilesDir(), FILE_NAME);
+        Context appContext = context.getApplicationContext();
+        Context safeContext = appContext != null ? appContext : context;
+        orderFile = new AtomicFile(new File(safeContext.getFilesDir(), FILE_NAME));
     }
 
-    public void saveOrder(List<VideoItem> videoList) {
+    /**
+     * Persists the complete order atomically so a process stop or storage failure cannot leave a
+     * truncated JSON file behind.
+     */
+    public synchronized void saveOrder(List<VideoItem> videoList) {
+        JSONArray array = new JSONArray();
+        for (VideoItem item : videoList) {
+            array.put(item.getPath());
+        }
+
+        FileOutputStream output = null;
         try {
-            JSONArray array = new JSONArray();
-            for (VideoItem item : videoList) array.put(item.getPath());
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(orderFile))) {
-                writer.write(array.toString());
-            }
-            cachedOrder = new ArrayList<>();
-            for (VideoItem item : videoList) {
-                cachedOrder.add(item.getPath());
-            }
-            cachedLastModified = orderFile.lastModified();
+            output = orderFile.startWrite();
+            output.write(array.toString().getBytes(StandardCharsets.UTF_8));
+            output.flush();
+            orderFile.finishWrite(output);
         } catch (Exception e) {
-            e.printStackTrace();
+            if (output != null) {
+                orderFile.failWrite(output);
+            }
+            Log.w(TAG, "Unable to save the video order", e);
         }
     }
 
-    public List<String> loadOrder() {
-        if (!orderFile.exists()) return new ArrayList<>();
-        long lastModified = orderFile.lastModified();
-        if (cachedLastModified == lastModified) {
-            return new ArrayList<>(cachedOrder);
-        }
+    public synchronized List<String> loadOrder() {
         List<String> order = new ArrayList<>();
-        try {
-            StringBuilder sb = new StringBuilder();
-            try (BufferedReader reader = new BufferedReader(new FileReader(orderFile))) {
-                String line;
-                while ((line = reader.readLine()) != null) sb.append(line);
+        try (FileInputStream input = orderFile.openRead();
+             BufferedReader reader = new BufferedReader(
+                     new InputStreamReader(input, StandardCharsets.UTF_8))) {
+            StringBuilder json = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                json.append(line);
             }
-            JSONArray array = new JSONArray(sb.toString());
-            for (int i = 0; i < array.length(); i++) order.add(array.getString(i));
-            cachedOrder = new ArrayList<>(order);
-            cachedLastModified = lastModified;
+
+            JSONArray array = new JSONArray(json.toString());
+            for (int i = 0; i < array.length(); i++) {
+                order.add(array.getString(i));
+            }
+        } catch (FileNotFoundException ignored) {
+            // First launch: no order has been saved yet.
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.w(TAG, "Unable to load the video order", e);
+            order.clear();
         }
         return order;
     }

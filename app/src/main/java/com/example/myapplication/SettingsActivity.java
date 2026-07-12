@@ -38,6 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView tvAboutTitle;
     private TextView tvPlayTitle;
     private MaterialSwitch switchAutoPlayNext;
+    private MaterialSwitch switchRandomPlayOnStart;
     private PlaybackSettingsManager playbackSettingsManager;
     private TextView tvVersionValue;
     private View rowPrivacy;
@@ -70,6 +71,7 @@ public class SettingsActivity extends AppCompatActivity {
         tvAboutTitle = findViewById(R.id.tvAboutTitle);
         tvPlayTitle = findViewById(R.id.tvPlayTitle);
         switchAutoPlayNext = findViewById(R.id.switchAutoPlayNext);
+        switchRandomPlayOnStart = findViewById(R.id.switchRandomPlayOnStart);
         playbackSettingsManager = new PlaybackSettingsManager(this);
         tvVersionValue = findViewById(R.id.tvVersionValue);
         rowPrivacy = findViewById(R.id.rowPrivacy);
@@ -144,7 +146,8 @@ public class SettingsActivity extends AppCompatActivity {
             }
             if (!tag.equals(LanguageManager.currentLanguageTag(this))) {
                 LanguageManager.updateLanguage(this, tag);
-                refreshLocalizedTexts();
+                // Recreate so every XML-inflated label and future dialog uses the new locale.
+                recreate();
             }
         });
     }
@@ -153,6 +156,9 @@ public class SettingsActivity extends AppCompatActivity {
         switchAutoPlayNext.setChecked(playbackSettingsManager.isAutoPlayNext());
         switchAutoPlayNext.setOnCheckedChangeListener((buttonView, isChecked) ->
                 playbackSettingsManager.setAutoPlayNext(isChecked));
+        switchRandomPlayOnStart.setChecked(playbackSettingsManager.isRandomPlayOnStart());
+        switchRandomPlayOnStart.setOnCheckedChangeListener((buttonView, isChecked) ->
+                playbackSettingsManager.setRandomPlayOnStart(isChecked));
     }
 
     private void bindAboutClicks() {

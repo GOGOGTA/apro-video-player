@@ -12,9 +12,10 @@
     <string name="language_option_ko">&#54620;&#44397;&#50612;</string>
     <string name="play_setting_title">Lecture</string>
     <string name="auto_play_next_title">Lire automatiquement la vidéo suivante</string>
+    <string name="random_play_on_start_title">Lire une vidéo aléatoire à l’ouverture de l’application</string>
     <string name="about_title">À propos</string>
     <string name="privacy_entry">Confidentialité</string>
-    <string name="privacy_content">Cette application lit uniquement les fichiers vidéo en local. Elle n\'envoie ni ne collecte vos vidéos ou données personnelles.</string>
+    <string name="privacy_content">Cette application lit les vidéos localement. Pour fournir la notification système de lecture et OPPO Fluid Cloud sur les appareils compatibles, le titre actuel, la progression et un identifiant de média local peuvent être transmis aux services système de l’appareil. L’application elle-même ne téléverse pas les fichiers vidéo.</string>
     <string name="version_entry">Version</string>
     <string name="version_format">Version %1$s</string>
     <string name="license_entry">Licences open source</string>

@@ -25,4 +25,6 @@
     <string name="widget_device_format">Dispositivo: %1$s</string>
     <string name="widget_cast_tips">Entrada de transmisión reservada</string>
     <string name="widget_lyrics_tips">Panel de letras pendiente de integrar</string>
+    <string name="video_thumbnail">Miniatura del vídeo</string>
+    <string name="hide_video_action">Ocultar vídeo %1$s</string>
 </resources>

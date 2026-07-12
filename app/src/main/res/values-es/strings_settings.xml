@@ -12,9 +12,10 @@
     <string name="language_option_ko">&#54620;&#44397;&#50612;</string>
     <string name="play_setting_title">Reproducción</string>
     <string name="auto_play_next_title">Reproducir automáticamente el siguiente video</string>
+    <string name="random_play_on_start_title">Reproducir un vídeo aleatorio al abrir la aplicación</string>
     <string name="about_title">Acerca de</string>
     <string name="privacy_entry">Privacidad</string>
-    <string name="privacy_content">Esta aplicación solo lee los archivos de video de forma local. No sube ni recopila tus videos ni datos personales.</string>
+    <string name="privacy_content">Esta aplicación lee los vídeos de forma local. Para ofrecer la notificación de reproducción del sistema y OPPO Fluid Cloud en dispositivos compatibles, el título actual, el progreso y un identificador multimedia local pueden enviarse a los servicios del sistema del dispositivo. La aplicación no sube los archivos de vídeo.</string>
     <string name="version_entry">Versión</string>
     <string name="version_format">Versión %1$s</string>
     <string name="license_entry">Licencias de código abierto</string>

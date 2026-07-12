@@ -25,4 +25,6 @@
     <string name="widget_lyrics_tips">歌词面板待接入</string>
     <string name="playback_channel_name">锁屏播放控制</string>
     <string name="playback_channel_desc">在锁屏显示当前播放信息与快捷操作</string>
+    <string name="video_thumbnail">视频缩略图</string>
+    <string name="hide_video_action">隐藏视频 %1$s</string>
 </resources>

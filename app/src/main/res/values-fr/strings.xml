@@ -25,4 +25,6 @@
     <string name="widget_device_format">Appareil : %1$s</string>
     <string name="widget_cast_tips">Entrée de diffusion réservée</string>
     <string name="widget_lyrics_tips">Panneau de paroles à intégrer</string>
+    <string name="video_thumbnail">Miniature de la vidéo</string>
+    <string name="hide_video_action">Masquer la vidéo %1$s</string>
 </resources>

@@ -1,8 +1,6 @@
 package com.example.myapplication;
 
 import android.graphics.Bitmap;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class VideoManageAdapter extends RecyclerView.Adapter<VideoManageAdapter.ManageViewHolder> {
@@ -22,7 +21,6 @@ public class VideoManageAdapter extends RecyclerView.Adapter<VideoManageAdapter.
 
     private final List<VideoItem> videoList;
     private final OnDeleteListener deleteListener;
-    private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private int deleteModePosition = -1;
 
     public VideoManageAdapter(List<VideoItem> videoList, OnDeleteListener listener) {
@@ -81,6 +79,14 @@ public class VideoManageAdapter extends RecyclerView.Adapter<VideoManageAdapter.
                 if (dot > 0) name = name.substring(0, dot);
             }
             tvName.setText(name);
+            String accessibleName = name == null || name.trim().isEmpty()
+                    ? itemView.getContext().getString(R.string.video_thumbnail)
+                    : name;
+            ivThumbnail.setContentDescription(accessibleName);
+            btnDelete.setContentDescription(itemView.getContext().getString(
+                    R.string.hide_video_action,
+                    accessibleName
+            ));
 
             // 缩略图
             String path = item.getPath();
@@ -91,13 +97,15 @@ public class VideoManageAdapter extends RecyclerView.Adapter<VideoManageAdapter.
                 ivThumbnail.setImageBitmap(cached);
             } else {
                 ivThumbnail.setImageResource(android.R.color.darker_gray);
+                WeakReference<ImageView> thumbnailRef = new WeakReference<>(ivThumbnail);
                 ThumbnailCacheManager.getInstance().loadAsync(
                         itemView.getContext(), path, (loadedPath, bitmap) -> {
-                            mainHandler.post(() -> {
-                                if (loadedPath.equals(ivThumbnail.getTag()) && bitmap != null) {
-                                    ivThumbnail.setImageBitmap(bitmap);
-                                }
-                            });
+                            ImageView thumbnail = thumbnailRef.get();
+                            if (thumbnail != null
+                                    && loadedPath.equals(thumbnail.getTag())
+                                    && bitmap != null) {
+                                thumbnail.setImageBitmap(bitmap);
+                            }
                         });
             }
 

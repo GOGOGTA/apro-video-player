@@ -12,9 +12,10 @@
     <string name="language_option_ko">&#54620;&#44397;&#50612;</string>
     <string name="play_setting_title">Playback</string>
     <string name="auto_play_next_title">Auto-play next video</string>
+    <string name="random_play_on_start_title">Play a random video when opening the app</string>
     <string name="about_title">About</string>
     <string name="privacy_entry">Privacy</string>
-    <string name="privacy_content">This app only reads video files locally. It does not upload or collect your videos or any personal data.</string>
+    <string name="privacy_content">This app reads video files locally. To provide the system playback notification and OPPO Fluid Cloud on supported devices, the current media title, playback progress, and a local media identifier may be sent to device system services. The app itself does not upload video files.</string>
     <string name="version_entry">Version</string>
     <string name="version_format">Version %1$s</string>
     <string name="license_entry">Open-source licenses</string>

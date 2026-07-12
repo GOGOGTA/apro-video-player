@@ -15,8 +15,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.PendingIntent;
@@ -54,6 +54,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadLocalRandom;
 
 @UnstableApi
 public class MainActivity extends AppCompatActivity {
@@ -63,6 +64,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int MAX_PLAY_ATTACH_RETRIES = 6;
     private static final String PLAYBACK_CHANNEL_ID = "aplayer_playback";
     private static final int PLAYBACK_NOTIFICATION_ID = 1201;
+    private static final String STATE_PLAYBACK_PATH = "state_playback_path";
+    private static final String STATE_PLAYBACK_POSITION = "state_playback_position";
+    private static final String STATE_PLAY_WHEN_READY = "state_play_when_ready";
+    private static final String STATE_RANDOM_START_PENDING = "state_random_start_pending";
+    private static final String TAG = "MainActivity";
 
     private final List<VideoItem> videoList = new ArrayList<>();
     private final List<String> playerPlaylistPaths = new ArrayList<>();
@@ -96,6 +102,14 @@ public class MainActivity extends AppCompatActivity {
     private long totalVideoBytes = 0L;
     private int currentPlayingIndex = -1;
     private boolean suppressNextPagePlay = false;
+    private boolean lifecyclePaused = false;
+    private boolean resumePlaybackOnResume = false;
+    private boolean hasPendingPlaybackRestore = false;
+    @Nullable
+    private String pendingRestorePath;
+    private long pendingRestorePositionMs = 0L;
+    private boolean pendingRestorePlayWhenReady = true;
+    private boolean randomStartPending = false;
     private final Map<String, String> artistCache = new HashMap<>();
     private final Set<String> artistInFlight = new HashSet<>();
     private final ExecutorService metadataExecutor = Executors.newSingleThreadExecutor();
@@ -103,10 +117,12 @@ public class MainActivity extends AppCompatActivity {
     private static final class VideoLoadResult {
         final List<VideoItem> videos;
         final long totalBytes;
+        final boolean successful;
 
-        VideoLoadResult(List<VideoItem> videos, long totalBytes) {
+        VideoLoadResult(List<VideoItem> videos, long totalBytes, boolean successful) {
             this.videos = videos;
             this.totalBytes = totalBytes;
+            this.successful = successful;
         }
     }
 
@@ -169,17 +185,35 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         LanguageManager.applySavedLanguage(this);
         super.onCreate(savedInstanceState);
-        enableLockscreenDisplay();
+        restorePlaybackState(savedInstanceState);
         setContentView(R.layout.activity_main);
-        requestNotificationPermissionIfNeeded();
 
         hiddenVideosManager = new HiddenVideosManager(this);
         videoOrderManager = new VideoOrderManager(this);
         playbackSettingsManager = new PlaybackSettingsManager(this);
+        randomStartPending = savedInstanceState == null
+                ? playbackSettingsManager.isRandomPlayOnStart()
+                : savedInstanceState.getBoolean(STATE_RANDOM_START_PENDING, false);
         initViews();
         initBackPressedHandler();
         initPlayer();
         checkPermissionsAndLoadVideos();
+    }
+
+    private void restorePlaybackState(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState == null || !savedInstanceState.containsKey(STATE_PLAYBACK_PATH)) {
+            return;
+        }
+        pendingRestorePath = savedInstanceState.getString(STATE_PLAYBACK_PATH);
+        pendingRestorePositionMs = Math.max(
+                0L,
+                savedInstanceState.getLong(STATE_PLAYBACK_POSITION, 0L)
+        );
+        pendingRestorePlayWhenReady = savedInstanceState.getBoolean(
+                STATE_PLAY_WHEN_READY,
+                true
+        );
+        hasPendingPlaybackRestore = pendingRestorePath != null;
     }
 
     private void initViews() {
@@ -394,14 +428,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void enableLockscreenDisplay() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            setShowWhenLocked(true);
-        } else {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-        }
-    }
-
     private void requestNotificationPermissionIfNeeded() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             return;
@@ -441,19 +467,39 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public CharSequence getCurrentContentTitle(Player player) {
                             VideoItem item = currentVideoItem();
-                            return item != null ? displayTitle(item.getName()) : getString(R.string.app_name);
+                            return item != null
+                                    ? displayTitle(item.getName())
+                                    : LanguageManager.getLocalizedString(
+                                            MainActivity.this,
+                                            R.string.app_name
+                                    );
                         }
 
                         @Override
                         public PendingIntent createCurrentContentIntent(Player player) {
-                            return null;
+                            Intent intent = new Intent(MainActivity.this, MainActivity.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                            | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                            int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                flags |= PendingIntent.FLAG_IMMUTABLE;
+                            }
+                            return PendingIntent.getActivity(
+                                    MainActivity.this,
+                                    0,
+                                    intent,
+                                    flags
+                            );
                         }
 
                         @Override
                         public CharSequence getCurrentContentText(Player player) {
                             VideoItem item = currentVideoItem();
                             if (item == null) {
-                                return getString(R.string.widget_unknown_artist);
+                                return LanguageManager.getLocalizedString(
+                                        MainActivity.this,
+                                        R.string.widget_unknown_artist
+                                );
                             }
                             return resolveArtist(item.getPath());
                         }
@@ -547,30 +593,34 @@ public class MainActivity extends AppCompatActivity {
 
     private String displayTitle(String rawName) {
         if (rawName == null || rawName.trim().isEmpty()) {
-            return getString(R.string.widget_unknown_track);
+            return LanguageManager.getLocalizedString(this, R.string.widget_unknown_track);
         }
         int dot = rawName.lastIndexOf('.');
         String title = dot > 0 ? rawName.substring(0, dot) : rawName;
         title = title.replace('_', ' ').replace('-', ' ');
-        title = title.replaceAll("(?i)^(vid|video|rec|record|audio|song)\\s*", "");
+        title = title.replaceAll("(?i)^(vid|video|rec|record|audio|song)(?:\\s+|$)", "");
         title = title.replaceAll("^\\d{4}\\s*\\d{2}\\s*\\d{2}\\s*", "");
         title = title.replaceAll("^\\d{2}\\s*\\d{2}\\s*\\d{2}\\s*", "");
         title = title.replaceAll("\\s{2,}", " ").trim();
-        return title.isEmpty() ? getString(R.string.widget_unknown_track) : title;
+        return title.isEmpty()
+                ? LanguageManager.getLocalizedString(this, R.string.widget_unknown_track)
+                : title;
     }
 
     private String resolveArtist(String path) {
         if (path == null || path.trim().isEmpty()) {
-            return getString(R.string.widget_unknown_artist);
+            return LanguageManager.getLocalizedString(this, R.string.widget_unknown_artist);
         }
         String cachedArtist = artistCache.get(path);
         if (cachedArtist != null) {
-            return cachedArtist;
+            return cachedArtist.isEmpty()
+                    ? LanguageManager.getLocalizedString(this, R.string.widget_unknown_artist)
+                    : cachedArtist;
         }
         // Metadata extraction is blocking I/O, so resolve it off the main thread and
         // refresh the notification / Fluid Cloud once the real artist is available.
         requestArtistAsync(path);
-        return getString(R.string.widget_unknown_artist);
+        return LanguageManager.getLocalizedString(this, R.string.widget_unknown_artist);
     }
 
     private void requestArtistAsync(String path) {
@@ -606,11 +656,11 @@ public class MainActivity extends AppCompatActivity {
                 artist = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST);
             }
             if (artist == null || artist.trim().isEmpty()) {
-                return getString(R.string.widget_unknown_artist);
+                return "";
             }
             return artist.trim();
         } catch (Exception ignored) {
-            return getString(R.string.widget_unknown_artist);
+            return "";
         } finally {
             try {
                 retriever.release();
@@ -624,7 +674,15 @@ public class MainActivity extends AppCompatActivity {
         player.setRepeatMode(getRepeatMode());
         player.setPlaybackParameters(new PlaybackParameters(1.0f));
         player.addListener(mainPlayerListener);
-        oppoFlowCloudBridge = new OppoFlowCloudBridge(this);
+        // The vendor AAR declares minSdk 26. Keep the core player available on older devices
+        // instead of forcing unsupported SDK classes to initialize there.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            try {
+                oppoFlowCloudBridge = new OppoFlowCloudBridge(this);
+            } catch (Throwable ignored) {
+                oppoFlowCloudBridge = null;
+            }
+        }
         initMediaSessionAndNotification();
     }
 
@@ -754,20 +812,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkPermissionsAndLoadVideos() {
-        String permission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-                ? Manifest.permission.READ_MEDIA_VIDEO
-                : Manifest.permission.READ_EXTERNAL_STORAGE;
-
-        if (ContextCompat.checkSelfPermission(this, permission)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (!hasVideoReadPermission()) {
             ActivityCompat.requestPermissions(
                     this,
-                    new String[]{permission},
+                    videoReadPermissionsForRequest(),
                     PERMISSION_REQUEST_CODE
             );
         } else {
             loadVideos();
+            requestNotificationPermissionIfNeeded();
         }
+    }
+
+    private boolean hasVideoReadPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_VIDEO)
+                    == PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
+            ) == PackageManager.PERMISSION_GRANTED;
+        }
+        String permission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                ? Manifest.permission.READ_MEDIA_VIDEO
+                : Manifest.permission.READ_EXTERNAL_STORAGE;
+        return ContextCompat.checkSelfPermission(this, permission)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private String[] videoReadPermissionsForRequest() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            return new String[]{
+                    Manifest.permission.READ_MEDIA_VIDEO,
+                    Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
+            };
+        }
+        return new String[]{Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                ? Manifest.permission.READ_MEDIA_VIDEO
+                : Manifest.permission.READ_EXTERNAL_STORAGE};
     }
 
     private void loadVideos() {
@@ -785,6 +867,7 @@ public class MainActivity extends AppCompatActivity {
     private VideoLoadResult queryVisibleVideos() {
         List<VideoItem> loadedVideos = new ArrayList<>();
         long totalBytes = 0L;
+        boolean successful = false;
         ContentResolver contentResolver = getContentResolver();
         Uri collection = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
         String[] projection = {
@@ -801,6 +884,7 @@ public class MainActivity extends AppCompatActivity {
                 MediaStore.Video.Media.DATE_ADDED + " DESC"
         )) {
             if (cursor != null) {
+                successful = true;
                 int idIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID);
                 int nameIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME);
                 int sizeIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE);
@@ -817,11 +901,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.w(TAG, "Unable to query videos from MediaStore", e);
         }
 
         applySavedOrder(loadedVideos);
-        return new VideoLoadResult(loadedVideos, totalBytes);
+        return new VideoLoadResult(loadedVideos, totalBytes, successful);
     }
 
     private void applySavedOrder(List<VideoItem> loadedVideos) {
@@ -846,6 +930,31 @@ public class MainActivity extends AppCompatActivity {
         if (destroyed || generation != loadGeneration) {
             return;
         }
+        // A transient provider/permission failure must not erase the currently playable list.
+        if (!result.successful) {
+            return;
+        }
+
+        boolean hadPlaylist = player != null && player.getMediaItemCount() > 0;
+        int previousIndex = player != null ? player.getCurrentMediaItemIndex() : -1;
+        if (previousIndex < 0 && viewPager != null) {
+            previousIndex = viewPager.getCurrentItem();
+        }
+
+        String preferredPath = hasPendingPlaybackRestore
+                ? pendingRestorePath
+                : currentPlayerPath();
+        long preferredPositionMs = hasPendingPlaybackRestore
+                ? pendingRestorePositionMs
+                : player != null ? Math.max(0L, player.getCurrentPosition()) : 0L;
+        boolean playWhenVisible = hasPendingPlaybackRestore
+                ? pendingRestorePlayWhenReady
+                : hadPlaylist
+                ? (lifecyclePaused ? resumePlaybackOnResume : player.getPlayWhenReady())
+                : true;
+        boolean shouldRandomizeStart = randomStartPending
+                && !hasPendingPlaybackRestore
+                && !hadPlaylist;
 
         videoList.clear();
         videoList.addAll(result.videos);
@@ -865,18 +974,73 @@ public class MainActivity extends AppCompatActivity {
             setMenuButtonVisible(false);
             clearPlayerPlaylist();
             viewPager.setCurrentItem(0, false);
+            hasPendingPlaybackRestore = false;
+            pendingRestorePath = null;
+            randomStartPending = false;
             return;
         }
 
+        int targetIndex = PlaybackStateResolver.resolveIndex(
+                videoList,
+                preferredPath,
+                previousIndex
+        );
+        boolean sameVideo = PlaybackStateResolver.isSameVideo(
+                videoList,
+                targetIndex,
+                preferredPath
+        );
+        if (shouldRandomizeStart) {
+            targetIndex = ThreadLocalRandom.current().nextInt(videoList.size());
+            sameVideo = false;
+        }
+        long targetPositionMs = sameVideo ? preferredPositionMs : 0L;
+
+        hasPendingPlaybackRestore = false;
+        pendingRestorePath = null;
+        randomStartPending = false;
         emptyStateView.setVisibility(View.GONE);
+        videoGridAdapter.setSelectedPosition(targetIndex);
+
+        boolean shouldPlayNow = playWhenVisible && !lifecyclePaused;
+        if (lifecyclePaused) {
+            resumePlaybackOnResume = playWhenVisible;
+        }
+        final int restoredIndex = targetIndex;
+        final long restoredPositionMs = targetPositionMs;
         viewPager.post(() -> {
             if (destroyed || generation != loadGeneration || videoList.isEmpty()) {
                 return;
             }
-            viewPager.setCurrentItem(0, false);
-            videoGridAdapter.setSelectedPosition(0);
-            playVideoAt(0);
+            restoreLoadedPlayback(restoredIndex, restoredPositionMs, shouldPlayNow);
         });
+    }
+
+    private void restoreLoadedPlayback(int position, long positionMs, boolean shouldPlay) {
+        if (player == null || position < 0 || position >= videoList.size()) {
+            return;
+        }
+        if (viewPager.getCurrentItem() != position) {
+            suppressNextPagePlay = true;
+            viewPager.setCurrentItem(position, false);
+        }
+
+        player.setRepeatMode(getRepeatMode());
+        if (!shouldPlay) {
+            player.pause();
+        }
+        replacePlayerPlaylist(position, positionMs);
+        currentPlayingIndex = position;
+        if (shouldPlay) {
+            player.play();
+        } else {
+            player.pause();
+        }
+        attachPlayerToPage(position, 0);
+        if (playerNotificationManager != null) {
+            playerNotificationManager.invalidate();
+        }
+        syncFlowCloudFromCurrentState();
     }
 
     private void playVideoAt(int position) {
@@ -949,7 +1113,6 @@ public class MainActivity extends AppCompatActivity {
         videoPagerAdapter.detachPlayersExcept(videoHolder);
         videoHolder.attachPlayer(player);
         currentPlayingIndex = position;
-        player.play();
         if (playerNotificationManager != null) {
             playerNotificationManager.invalidate();
         }
@@ -958,16 +1121,25 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        super.onPause();
         if (player != null) {
+            resumePlaybackOnResume = player.getMediaItemCount() == 0
+                    || player.getPlayWhenReady();
+            lifecyclePaused = true;
             player.pause();
         }
+        if (videoPagerAdapter != null) {
+            // Stops the 100 ms progress loop and releases the video surface while off-screen.
+            videoPagerAdapter.detachAllPlayers();
+        }
         syncFlowCloudFromCurrentState();
+        super.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        boolean shouldResumePlayback = lifecyclePaused && resumePlaybackOnResume;
+        lifecyclePaused = false;
         LanguageManager.applySavedLanguage(this);
         refreshLocalizedTexts();
         initMediaSessionAndNotification();
@@ -978,11 +1150,40 @@ public class MainActivity extends AppCompatActivity {
         player.setRepeatMode(getRepeatMode());
         if (player.getMediaItemCount() == 0) {
             // Media not attached yet (e.g. returning before the initial load finished) -> set up.
-            viewPager.post(() -> playVideoAt(viewPager.getCurrentItem()));
+            viewPager.post(() -> {
+                playVideoAt(viewPager.getCurrentItem());
+                if (!shouldResumePlayback && player != null) {
+                    player.pause();
+                }
+            });
         } else {
-            // Already prepared -> resume from the current position instead of restarting.
-            player.play();
+            int currentIndex = Math.max(
+                    0,
+                    Math.min(player.getCurrentMediaItemIndex(), videoList.size() - 1)
+            );
+            viewPager.post(() -> attachPlayerToPage(currentIndex, 0));
+            if (shouldResumePlayback) {
+                player.play();
+            } else {
+                // A video that the user paused manually must remain paused after returning.
+                player.pause();
+            }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBoolean(STATE_RANDOM_START_PENDING, randomStartPending);
+        String path = currentPlayerPath();
+        if (path != null && player != null) {
+            outState.putString(STATE_PLAYBACK_PATH, path);
+            outState.putLong(STATE_PLAYBACK_POSITION, Math.max(0L, player.getCurrentPosition()));
+            outState.putBoolean(
+                    STATE_PLAY_WHEN_READY,
+                    lifecyclePaused ? resumePlaybackOnResume : player.getPlayWhenReady()
+            );
+        }
+        super.onSaveInstanceState(outState);
     }
 
     private void refreshLocalizedTexts() {
@@ -1043,9 +1244,9 @@ public class MainActivity extends AppCompatActivity {
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (hasVideoReadPermission()) {
                 loadVideos();
+                requestNotificationPermissionIfNeeded();
             } else {
                 Toast.makeText(this, LanguageManager.getLocalizedString(this, R.string.storage_permission_required), Toast.LENGTH_SHORT).show();
             }

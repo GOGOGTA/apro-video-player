@@ -259,6 +259,9 @@ public class VideoPagerAdapter extends RecyclerView.Adapter<VideoPagerAdapter.Vi
                     progressHandler.removeCallbacks(previewSeekRunnable);
                     previewDispatchScheduled = false;
                     pendingPreviewPositionMs = Long.MIN_VALUE;
+                    if (currentPlayer != null) {
+                        currentPlayer.setSeekParameters(SeekParameters.DEFAULT);
+                    }
                     if (restorePlaybackAfterScrub && currentPlayer != null) {
                         currentPlayer.play();
                     }
@@ -271,6 +274,8 @@ public class VideoPagerAdapter extends RecyclerView.Adapter<VideoPagerAdapter.Vi
                 }
             });
 
+            playerView.setOnClickListener(v -> togglePlaybackControls());
+
             gestureDetector = new GestureDetector(itemView.getContext(),
                     new GestureDetector.SimpleOnGestureListener() {
                         @Override
@@ -280,7 +285,7 @@ public class VideoPagerAdapter extends RecyclerView.Adapter<VideoPagerAdapter.Vi
 
                         @Override
                         public boolean onSingleTapConfirmed(@NonNull MotionEvent e) {
-                            togglePlaybackControls();
+                            playerView.performClick();
                             return true;
                         }
 
@@ -374,6 +379,10 @@ public class VideoPagerAdapter extends RecyclerView.Adapter<VideoPagerAdapter.Vi
             progressHandler.removeCallbacks(previewSeekRunnable);
 
             if (currentPlayer != null) {
+                if (currentPlayer.getPlaybackParameters().speed != 1.0f) {
+                    currentPlayer.setPlaybackParameters(new PlaybackParameters(1.0f));
+                }
+                currentPlayer.setSeekParameters(SeekParameters.DEFAULT);
                 currentPlayer.removeListener(playerListener);
             }
             if (playerView.getPlayer() != null) {
@@ -593,7 +602,11 @@ public class VideoPagerAdapter extends RecyclerView.Adapter<VideoPagerAdapter.Vi
         }
 
         private void updateSeekTimestamp(long positionMs, long durationMs) {
-            tvSeekTimestamp.setText(formatTime(positionMs) + " / " + formatTime(durationMs));
+            tvSeekTimestamp.setText(itemView.getContext().getString(
+                    R.string.seek_time_format,
+                    formatTime(positionMs),
+                    formatTime(durationMs)
+            ));
         }
 
         private void scheduleSeekInfoHide(long delayMs) {
