@@ -11,7 +11,7 @@ An Android video player for browsing and playing videos stored on your device. I
 - 播放、暂停、快进与精确拖动进度 / Play, pause, seek, and precisely scrub playback progress
 - 视频管理：排序、隐藏和删除操作 / Manage videos by sorting, hiding, or deleting them
 - 可设置自动播放下一条视频，以及启动时随机播放 / Configure autoplay for the next video and random playback on launch
-- 内置中文、English、Français、Español、Русский、日本語、한국어等语言 / Built-in Chinese, English, French, Spanish, Russian, Japanese, and Korean languages
+- 内置中文、英语、法语、西班牙语、俄语、日语、韩语等语言 / Built-in Chinese, English, French, Spanish, Russian, Japanese, and Korean languages
 
 ## 下载与安装
 
