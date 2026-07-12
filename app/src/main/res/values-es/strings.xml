@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Reproductor de video APro</string>
+    <string name="empty_video_message">No se encontraron videos</string>
+    <string name="video_list_title">Lista de videos</string>
+    <string name="open_video_list">Abrir lista de videos</string>
+    <string name="video_manage">Administrar videos</string>
+    <string name="video_count_format">Total de %1$d videos, usando %2$s</string>
+    <string name="video_count_default">Total de 0 videos, usando 0 B</string>
+    <string name="copyright_text">Copyright 2026 APro</string>
+    <string name="manage_title">Administrar videos</string>
+    <string name="manage_hint">Mant&#233;n presionada una miniatura para mostrar opciones de eliminaci&#243;n</string>
+    <string name="press_again_to_exit">Pulsa de nuevo para salir</string>
+    <string name="storage_permission_required">Se requiere permiso de almacenamiento para leer videos</string>
+    <string name="widget_artwork_desc">Carátula del álbum</string>
+    <string name="widget_cast">Transmitir</string>
+    <string name="widget_previous">Anterior</string>
+    <string name="widget_play_pause">Reproducir o pausar</string>
+    <string name="widget_next">Siguiente</string>
+    <string name="widget_lyrics">Letra</string>
+    <string name="playback_channel_name">Reproducción en la pantalla de bloqueo</string>
+    <string name="playback_channel_desc">Muestra la información de reproducción y los controles rápidos en la pantalla de bloqueo</string>
+    <string name="widget_unknown_artist">Artista desconocido</string>
+    <string name="widget_unknown_track">Título desconocido</string>
+    <string name="widget_device_format">Dispositivo: %1$s</string>
+    <string name="widget_cast_tips">Entrada de transmisión reservada</string>
+    <string name="widget_lyrics_tips">Panel de letras pendiente de integrar</string>
+</resources>

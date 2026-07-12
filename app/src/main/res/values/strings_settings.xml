@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Settings</string>
+    <string name="language_setting_title">Language</string>
+    <string name="language_current_format">Current: %1$s</string>
+    <string name="language_option_zh">&#20013;&#25991;</string>
+    <string name="language_option_en">English</string>
+    <string name="language_option_fr">Fran&#231;ais</string>
+    <string name="language_option_es">Espa&#241;ol</string>
+    <string name="language_option_ru">&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;</string>
+    <string name="language_option_ja">&#26085;&#26412;&#35486;</string>
+    <string name="language_option_ko">&#54620;&#44397;&#50612;</string>
+    <string name="play_setting_title">播放</string>
+    <string name="auto_play_next_title">自动播放下一个视频</string>
+    <string name="about_title">关于</string>
+    <string name="privacy_entry">隐私说明</string>
+    <string name="privacy_content">本 App 仅在本地读取视频文件，不上传、不收集用户视频或个人隐私数据。</string>
+    <string name="version_entry">版本信息</string>
+    <string name="version_format">版本 %1$s</string>
+    <string name="license_entry">开源许可</string>
+    <string name="license_content">本项目使用了以下开源库：\n\n· AndroidX\n· Material Components for Android\n· Media3 / ExoPlayer\n\n感谢所有开源贡献者。</string>
+    <string name="feedback_entry">问题反馈</string>
+    <string name="feedback_description">如在使用过程中遇到问题，欢迎通过以下邮箱联系开发者：</string>
+    <string name="feedback_email_hint">长按邮箱地址可复制</string>
+    <string name="feedback_email">aaallthebest@outlook.com</string>
+    <string name="feedback_got_it">我知道了</string>
+    <string name="feedback_copied">邮箱地址已复制</string>
+</resources>

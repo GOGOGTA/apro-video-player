@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Param&#232;tres</string>
+    <string name="language_setting_title">Langue</string>
+    <string name="language_current_format">Actuelle : %1$s</string>
+    <string name="language_option_zh">&#20013;&#25991;</string>
+    <string name="language_option_en">English</string>
+    <string name="language_option_fr">Fran&#231;ais</string>
+    <string name="language_option_es">Espa&#241;ol</string>
+    <string name="language_option_ru">&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;</string>
+    <string name="language_option_ja">&#26085;&#26412;&#35486;</string>
+    <string name="language_option_ko">&#54620;&#44397;&#50612;</string>
+    <string name="play_setting_title">Lecture</string>
+    <string name="auto_play_next_title">Lire automatiquement la vidéo suivante</string>
+    <string name="about_title">À propos</string>
+    <string name="privacy_entry">Confidentialité</string>
+    <string name="privacy_content">Cette application lit uniquement les fichiers vidéo en local. Elle n\'envoie ni ne collecte vos vidéos ou données personnelles.</string>
+    <string name="version_entry">Version</string>
+    <string name="version_format">Version %1$s</string>
+    <string name="license_entry">Licences open source</string>
+    <string name="license_content">Ce projet utilise les bibliothèques open source suivantes :\n\n· AndroidX\n· Material Components for Android\n· Media3 / ExoPlayer\n\nMerci à tous les contributeurs open source.</string>
+    <string name="feedback_entry">Commentaires</string>
+    <string name="feedback_description">Si vous rencontrez un problème, n\'hésitez pas à contacter le développeur à :</string>
+    <string name="feedback_email_hint">Appuyez longuement sur l\'adresse e-mail pour la copier</string>
+    <string name="feedback_email">aaallthebest@outlook.com</string>
+    <string name="feedback_got_it">J\'ai compris</string>
+    <string name="feedback_copied">Adresse e-mail copiée</string>
+</resources>

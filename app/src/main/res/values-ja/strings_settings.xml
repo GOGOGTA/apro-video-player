@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">&#35373;&#23450;</string>
+    <string name="language_setting_title">&#35328;&#35486;</string>
+    <string name="language_current_format">&#29694;&#22312;: %1$s</string>
+    <string name="language_option_zh">&#20013;&#25991;</string>
+    <string name="language_option_en">English</string>
+    <string name="language_option_fr">Fran&#231;ais</string>
+    <string name="language_option_es">Espa&#241;ol</string>
+    <string name="language_option_ru">&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;</string>
+    <string name="language_option_ja">&#26085;&#26412;&#35486;</string>
+    <string name="language_option_ko">&#54620;&#44397;&#50612;</string>
+    <string name="play_setting_title">再生</string>
+    <string name="auto_play_next_title">次の動画を自動再生</string>
+    <string name="about_title">アプリについて</string>
+    <string name="privacy_entry">プライバシー</string>
+    <string name="privacy_content">このアプリは動画ファイルをローカルで読み込むだけで、動画や個人情報をアップロード・収集することはありません。</string>
+    <string name="version_entry">バージョン情報</string>
+    <string name="version_format">バージョン %1$s</string>
+    <string name="license_entry">オープンソースライセンス</string>
+    <string name="license_content">このアプリは以下のオープンソースライブラリを使用しています：\n\n· AndroidX\n· Material Components for Android\n· Media3 / ExoPlayer\n\nすべてのオープンソース貢献者に感謝します。</string>
+    <string name="feedback_entry">フィードバック</string>
+    <string name="feedback_description">ご利用中に問題が発生した場合は、以下のメールアドレスまでお気軽にご連絡ください：</string>
+    <string name="feedback_email_hint">メールアドレスを長押しするとコピーできます</string>
+    <string name="feedback_email">aaallthebest@outlook.com</string>
+    <string name="feedback_got_it">OK</string>
+    <string name="feedback_copied">メールアドレスをコピーしました</string>
+</resources>

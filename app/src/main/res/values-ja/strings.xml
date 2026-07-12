@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">APro &#12499;&#12487;&#12458;&#12503;&#12524;&#12540;&#12516;&#12540;</string>
+    <string name="empty_video_message">&#21205;&#30011;&#12364;&#35211;&#12388;&#12363;&#12426;&#12414;&#12379;&#12435;</string>
+    <string name="video_list_title">&#21205;&#30011;&#12522;&#12473;&#12488;</string>
+    <string name="open_video_list">&#21205;&#30011;&#12522;&#12473;&#12488;&#12434;&#38283;&#12367;</string>
+    <string name="video_manage">&#21205;&#30011;&#12434;&#31649;&#29702;</string>
+    <string name="video_count_format">&#21512;&#35336; %1$d &#26412;&#12289;&#20351;&#29992;&#23481;&#37327; %2$s</string>
+    <string name="video_count_default">&#21512;&#35336; 0 &#26412;&#12289;&#20351;&#29992;&#23481;&#37327; 0 B</string>
+    <string name="copyright_text">&#33879;&#20316;&#27177; 2026 APro</string>
+    <string name="manage_title">&#21205;&#30011;&#12434;&#31649;&#29702;</string>
+    <string name="manage_hint">&#12469;&#12512;&#12493;&#12452;&#12523;&#12434;&#38263;&#25276;&#12375;&#12377;&#12427;&#12392;&#21066;&#38500;&#12458;&#12503;&#12471;&#12519;&#12531;&#12434;&#34920;&#31034;&#12375;&#12414;&#12377;</string>
+    <string name="press_again_to_exit">&#12418;&#12358;&#19968;&#24230;&#25276;&#12377;&#12392;&#32066;&#20102;&#12375;&#12414;&#12377;</string>
+    <string name="storage_permission_required">&#21205;&#30011;&#12434;&#35501;&#12415;&#21462;&#12427;&#12395;&#12399;&#12473;&#12488;&#12524;&#12540;&#12472;&#27177;&#38480;&#12364;&#24517;&#35201;&#12391;&#12377;</string>
+    <string name="widget_artwork_desc">アルバムアート</string>
+    <string name="widget_cast">キャスト</string>
+    <string name="widget_previous">前へ</string>
+    <string name="widget_play_pause">再生または一時停止</string>
+    <string name="widget_next">次へ</string>
+    <string name="widget_lyrics">歌詞</string>
+    <string name="playback_channel_name">ロック画面の再生コントロール</string>
+    <string name="playback_channel_desc">ロック画面に再生中の情報とクイック操作を表示します</string>
+    <string name="widget_unknown_artist">不明なアーティスト</string>
+    <string name="widget_unknown_track">不明なタイトル</string>
+    <string name="widget_device_format">デバイス：%1$s</string>
+    <string name="widget_cast_tips">キャスト入口は予約済みです</string>
+    <string name="widget_lyrics_tips">歌詞パネルは未接続です</string>
+</resources>

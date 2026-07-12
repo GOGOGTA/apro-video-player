@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">&#1053;&#1072;&#1089;&#1090;&#1088;&#1086;&#1081;&#1082;&#1080;</string>
+    <string name="language_setting_title">&#1071;&#1079;&#1099;&#1082;</string>
+    <string name="language_current_format">&#1058;&#1077;&#1082;&#1091;&#1097;&#1080;&#1081;: %1$s</string>
+    <string name="language_option_zh">&#20013;&#25991;</string>
+    <string name="language_option_en">English</string>
+    <string name="language_option_fr">Fran&#231;ais</string>
+    <string name="language_option_es">Espa&#241;ol</string>
+    <string name="language_option_ru">&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;</string>
+    <string name="language_option_ja">&#26085;&#26412;&#35486;</string>
+    <string name="language_option_ko">&#54620;&#44397;&#50612;</string>
+    <string name="play_setting_title">Воспроизведение</string>
+    <string name="auto_play_next_title">Автовоспроизведение следующего видео</string>
+    <string name="about_title">О приложении</string>
+    <string name="privacy_entry">Конфиденциальность</string>
+    <string name="privacy_content">Это приложение только читает видеофайлы локально. Оно не загружает и не собирает ваши видео или личные данные.</string>
+    <string name="version_entry">Версия</string>
+    <string name="version_format">Версия %1$s</string>
+    <string name="license_entry">Лицензии открытого ПО</string>
+    <string name="license_content">В этом проекте используются следующие библиотеки с открытым исходным кодом:\n\n· AndroidX\n· Material Components for Android\n· Media3 / ExoPlayer\n\nБлагодарим всех участников сообщества открытого кода.</string>
+    <string name="feedback_entry">Обратная связь</string>
+    <string name="feedback_description">Если у вас возникли проблемы, свяжитесь с разработчиком по адресу:</string>
+    <string name="feedback_email_hint">Нажмите и удерживайте адрес эл. почты, чтобы скопировать его</string>
+    <string name="feedback_email">aaallthebest@outlook.com</string>
+    <string name="feedback_got_it">Понятно</string>
+    <string name="feedback_copied">Адрес эл. почты скопирован</string>
+</resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">APro Video Player</string>
+    <string name="empty_video_message">No videos found</string>
+    <string name="video_list_title">Video List</string>
+    <string name="open_video_list">Open Video List</string>
+    <string name="video_manage">Manage Videos</string>
+    <string name="video_count_format">Total %1$d videos, using %2$s</string>
+    <string name="video_count_default">Total 0 videos, using 0 B</string>
+    <string name="copyright_text">Copyright 2026 APro</string>
+    <string name="manage_title">Manage Videos</string>
+    <string name="manage_hint">Long press a thumbnail to show delete options</string>
+    <string name="press_again_to_exit">Press again to exit</string>
+    <string name="storage_permission_required">Storage permission is required to read videos</string>
+    <string name="widget_artwork_desc">Album artwork</string>
+    <string name="widget_cast">Cast</string>
+    <string name="widget_previous">Previous</string>
+    <string name="widget_play_pause">Play or pause</string>
+    <string name="widget_next">Next</string>
+    <string name="widget_lyrics">Lyrics</string>
+    <string name="playback_channel_name">Lock-screen playback</string>
+    <string name="playback_channel_desc">Shows current playback info and quick controls on the lock screen</string>
+    <string name="widget_unknown_artist">Unknown artist</string>
+    <string name="widget_unknown_track">Unknown title</string>
+    <string name="widget_device_format">Device: %1$s</string>
+    <string name="widget_cast_tips">Cast entry reserved</string>
+    <string name="widget_lyrics_tips">Lyrics panel pending integration</string>
+</resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">&#49444;&#51221;</string>
+    <string name="language_setting_title">&#50616;&#50612;</string>
+    <string name="language_current_format">&#54868;&#47732; &#50616;&#50612;: %1$s</string>
+    <string name="language_option_zh">&#20013;&#25991;</string>
+    <string name="language_option_en">English</string>
+    <string name="language_option_fr">Fran&#231;ais</string>
+    <string name="language_option_es">Espa&#241;ol</string>
+    <string name="language_option_ru">&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;</string>
+    <string name="language_option_ja">&#26085;&#26412;&#35486;</string>
+    <string name="language_option_ko">&#54620;&#44397;&#50612;</string>
+    <string name="play_setting_title">재생</string>
+    <string name="auto_play_next_title">다음 동영상 자동 재생</string>
+    <string name="about_title">정보</string>
+    <string name="privacy_entry">개인정보 처리방침</string>
+    <string name="privacy_content">이 앱은 동영상 파일을 로컬에서 읽기만 하며, 동영상이나 개인정보를 업로드하거나 수집하지 않습니다.</string>
+    <string name="version_entry">버전 정보</string>
+    <string name="version_format">버전 %1$s</string>
+    <string name="license_entry">오픈소스 라이선스</string>
+    <string name="license_content">이 앱은 다음 오픈소스 라이브러리를 사용합니다:\n\n· AndroidX\n· Material Components for Android\n· Media3 / ExoPlayer\n\n모든 오픈소스 기여자분들께 감사드립니다.</string>
+    <string name="feedback_entry">의견 보내기</string>
+    <string name="feedback_description">사용 중 문제가 발생하면 아래 이메일로 개발자에게 문의해 주세요:</string>
+    <string name="feedback_email_hint">이메일 주소를 길게 누르면 복사됩니다</string>
+    <string name="feedback_email">aaallthebest@outlook.com</string>
+    <string name="feedback_got_it">확인</string>
+    <string name="feedback_copied">이메일 주소가 복사되었습니다</string>
+</resources>

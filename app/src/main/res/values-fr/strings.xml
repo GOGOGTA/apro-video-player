@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">APro Lecteur vid&#233;o</string>
+    <string name="empty_video_message">Aucune vid&#233;o trouv&#233;e</string>
+    <string name="video_list_title">Liste des vid&#233;os</string>
+    <string name="open_video_list">Ouvrir la liste des vid&#233;os</string>
+    <string name="video_manage">G&#233;rer les vid&#233;os</string>
+    <string name="video_count_format">%1$d vid&#233;os au total, %2$s utilis&#233;s</string>
+    <string name="video_count_default">0 vid&#233;o au total, 0 B utilis&#233;s</string>
+    <string name="copyright_text">Copyright 2026 APro</string>
+    <string name="manage_title">G&#233;rer les vid&#233;os</string>
+    <string name="manage_hint">Appuyez longuement sur une miniature pour afficher les options de suppression</string>
+    <string name="press_again_to_exit">Appuyez encore pour quitter</string>
+    <string name="storage_permission_required">Autorisation de stockage requise pour lire les vid&#233;os</string>
+    <string name="widget_artwork_desc">Pochette d\'album</string>
+    <string name="widget_cast">Caster</string>
+    <string name="widget_previous">Précédent</string>
+    <string name="widget_play_pause">Lire ou mettre en pause</string>
+    <string name="widget_next">Suivant</string>
+    <string name="widget_lyrics">Paroles</string>
+    <string name="playback_channel_name">Lecture sur l\'écran de verrouillage</string>
+    <string name="playback_channel_desc">Affiche les informations de lecture et les commandes rapides sur l\'écran de verrouillage</string>
+    <string name="widget_unknown_artist">Artiste inconnu</string>
+    <string name="widget_unknown_track">Titre inconnu</string>
+    <string name="widget_device_format">Appareil : %1$s</string>
+    <string name="widget_cast_tips">Entrée de diffusion réservée</string>
+    <string name="widget_lyrics_tips">Panneau de paroles à intégrer</string>
+</resources>

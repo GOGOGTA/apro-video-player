@@ -1,0 +1,41 @@
+# Gradle / Android build outputs
+.gradle/
+build/
+**/build/
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.ap_
+*.aab
+*.dex
+
+# Android Studio / IntelliJ local files
+*.iml
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/deploymentTargetSelector.xml
+.idea/deviceManager.xml
+.idea/deploymentTargetDropDown.xml
+
+# Local machine configuration
+local.properties
+.claude/settings.local.json
+.DS_Store
+Thumbs.db
+
+# Signing keys and local secret/property files
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+*.key
+key.properties
+keystore.properties
+secrets.properties
+secret.properties

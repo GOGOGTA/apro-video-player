@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">APro &#48708;&#46356;&#50724; &#54540;&#47112;&#51060;&#50612;</string>
+    <string name="empty_video_message">&#46041;&#50689;&#49345;&#51012; &#52286;&#51012; &#49688; &#50630;&#49845;&#45768;&#45796;</string>
+    <string name="video_list_title">&#46041;&#50689;&#49345; &#47785;&#47197;</string>
+    <string name="open_video_list">&#46041;&#50689;&#49345; &#47785;&#47197; &#50676;&#44592;</string>
+    <string name="video_manage">&#46041;&#50689;&#49345; &#44288;&#47532;</string>
+    <string name="video_count_format">&#52509; %1$d&#44060; &#46041;&#50689;&#49345;, &#49324;&#50857; &#50857;&#47049; %2$s</string>
+    <string name="video_count_default">&#52509; 0&#44060; &#46041;&#50689;&#49345;, &#49324;&#50857; &#50857;&#47049; 0 B</string>
+    <string name="copyright_text">&#51200;&#51089;&#44428; 2026 APro</string>
+    <string name="manage_title">&#46041;&#50689;&#49345; &#44288;&#47532;</string>
+    <string name="manage_hint">&#50036;&#45348;&#51068;&#51012; &#44600;&#44172; &#45572;&#47476;&#47732; &#49325;&#51228; &#50741;&#49496;&#51060; &#54364;&#49884;&#46121;&#45768;&#45796;</string>
+    <string name="press_again_to_exit">&#54620; &#48264; &#45908; &#45572;&#47476;&#47732; &#51333;&#47308;&#46121;&#45768;&#45796;</string>
+    <string name="storage_permission_required">&#46041;&#50689;&#49345;&#51012; &#51069;&#44592; &#50948;&#54644; &#51200;&#51109;&#49548; &#44428;&#54620;&#51060; &#54596;&#50836;&#54633;&#45768;&#45796;</string>
+    <string name="widget_artwork_desc">앨범 아트</string>
+    <string name="widget_cast">캐스트</string>
+    <string name="widget_previous">이전</string>
+    <string name="widget_play_pause">재생 또는 일시정지</string>
+    <string name="widget_next">다음</string>
+    <string name="widget_lyrics">가사</string>
+    <string name="playback_channel_name">잠금 화면 재생 제어</string>
+    <string name="playback_channel_desc">잠금 화면에 현재 재생 정보와 빠른 작업을 표시합니다</string>
+    <string name="widget_unknown_artist">알 수 없는 아티스트</string>
+    <string name="widget_unknown_track">알 수 없는 제목</string>
+    <string name="widget_device_format">기기: %1$s</string>
+    <string name="widget_cast_tips">캐스트 진입점이 예약되어 있습니다</string>
+    <string name="widget_lyrics_tips">가사 패널은 연동 예정입니다</string>
+</resources>

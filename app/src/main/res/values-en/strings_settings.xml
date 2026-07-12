@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Settings</string>
+    <string name="language_setting_title">Language</string>
+    <string name="language_current_format">Current: %1$s</string>
+    <string name="language_option_zh">&#20013;&#25991;</string>
+    <string name="language_option_en">English</string>
+    <string name="language_option_fr">Fran&#231;ais</string>
+    <string name="language_option_es">Espa&#241;ol</string>
+    <string name="language_option_ru">&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;</string>
+    <string name="language_option_ja">&#26085;&#26412;&#35486;</string>
+    <string name="language_option_ko">&#54620;&#44397;&#50612;</string>
+    <string name="play_setting_title">Playback</string>
+    <string name="auto_play_next_title">Auto-play next video</string>
+    <string name="about_title">About</string>
+    <string name="privacy_entry">Privacy</string>
+    <string name="privacy_content">This app only reads video files locally. It does not upload or collect your videos or any personal data.</string>
+    <string name="version_entry">Version</string>
+    <string name="version_format">Version %1$s</string>
+    <string name="license_entry">Open-source licenses</string>
+    <string name="license_content">This project uses the following open-source libraries:\n\n· AndroidX\n· Material Components for Android\n· Media3 / ExoPlayer\n\nThanks to all open-source contributors.</string>
+    <string name="feedback_entry">Feedback</string>
+    <string name="feedback_description">If you run into any problems, feel free to contact the developer at:</string>
+    <string name="feedback_email_hint">Long-press the email address to copy it</string>
+    <string name="feedback_email">aaallthebest@outlook.com</string>
+    <string name="feedback_got_it">Got it</string>
+    <string name="feedback_copied">Email address copied</string>
+</resources>

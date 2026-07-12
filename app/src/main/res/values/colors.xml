@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material 3 配色方案 — 紫色调（参考图片中的 M3 风格） -->
+
+    <!-- Primary -->
+    <color name="md_primary">#6750A4</color>
+    <color name="md_on_primary">#FFFFFF</color>
+    <color name="md_primary_container">#EADDFF</color>
+    <color name="md_on_primary_container">#21005D</color>
+
+    <!-- Secondary -->
+    <color name="md_secondary">#625B71</color>
+    <color name="md_on_secondary">#FFFFFF</color>
+    <color name="md_secondary_container">#E8DEF8</color>
+    <color name="md_on_secondary_container">#1D192B</color>
+
+    <!-- Surface (亮色) -->
+    <color name="md_surface">#FFFBFE</color>
+    <color name="md_on_surface">#1C1B1F</color>
+    <color name="md_surface_variant">#E7E0EC</color>
+    <color name="md_on_surface_variant">#49454F</color>
+    <color name="md_outline">#79747E</color>
+
+    <!-- Surface (暗色) -->
+    <color name="md_surface_dark">#1C1B1F</color>
+    <color name="md_on_surface_dark">#E6E1E5</color>
+    <color name="md_surface_variant_dark">#49454F</color>
+    <color name="md_on_surface_variant_dark">#CAC4D0</color>
+    <color name="md_outline_dark">#938F99</color>
+
+    <!-- 额外：用于侧边栏和卡片 -->
+    <color name="drawer_background">#1C1B1F</color>
+    <color name="card_surface_dark">#2B2930</color>
+    <color name="manage_background">#1C1B1F</color>
+    <color name="manage_topbar">#2B2930</color>
+    <color name="delete_red">#F2B8B5</color>
+    <color name="delete_red_bg">#8C1D18</color>
+
+    <!-- 选中高亮 -->
+    <color name="selected_overlay">#406750A4</color>
+</resources>

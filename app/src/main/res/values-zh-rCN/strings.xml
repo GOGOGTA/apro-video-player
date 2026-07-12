@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">APro 视频播放器</string>
+    <string name="empty_video_message">未找到视频</string>
+    <string name="video_list_title">视频列表</string>
+    <string name="open_video_list">打开视频列表</string>
+    <string name="video_manage">管理视频</string>
+    <string name="video_count_format">共 %1$d 个视频，共占用 %2$s</string>
+    <string name="video_count_default">共 0 个视频，共占用 0 B</string>
+    <string name="copyright_text">版权所有 2026 APro</string>
+    <string name="manage_title">管理视频</string>
+    <string name="manage_hint">长按缩略图可显示删除操作</string>
+    <string name="press_again_to_exit">再按一次退出</string>
+    <string name="storage_permission_required">读取视频需要存储权限</string>
+    <string name="widget_artwork_desc">专辑封面</string>
+    <string name="widget_cast">投屏</string>
+    <string name="widget_previous">上一首</string>
+    <string name="widget_play_pause">播放或暂停</string>
+    <string name="widget_next">下一首</string>
+    <string name="widget_lyrics">歌词</string>
+    <string name="widget_unknown_artist">未知歌手</string>
+    <string name="widget_unknown_track">未知歌曲</string>
+    <string name="widget_device_format">设备：%1$s</string>
+    <string name="widget_cast_tips">投屏入口已预留</string>
+    <string name="widget_lyrics_tips">歌词面板待接入</string>
+    <string name="playback_channel_name">锁屏播放控制</string>
+    <string name="playback_channel_desc">在锁屏显示当前播放信息与快捷操作</string>
+</resources>

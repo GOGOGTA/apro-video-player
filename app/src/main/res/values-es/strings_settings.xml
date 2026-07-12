@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Configuraci&#243;n</string>
+    <string name="language_setting_title">Idioma</string>
+    <string name="language_current_format">Actual: %1$s</string>
+    <string name="language_option_zh">&#20013;&#25991;</string>
+    <string name="language_option_en">English</string>
+    <string name="language_option_fr">Fran&#231;ais</string>
+    <string name="language_option_es">Espa&#241;ol</string>
+    <string name="language_option_ru">&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;</string>
+    <string name="language_option_ja">&#26085;&#26412;&#35486;</string>
+    <string name="language_option_ko">&#54620;&#44397;&#50612;</string>
+    <string name="play_setting_title">Reproducción</string>
+    <string name="auto_play_next_title">Reproducir automáticamente el siguiente video</string>
+    <string name="about_title">Acerca de</string>
+    <string name="privacy_entry">Privacidad</string>
+    <string name="privacy_content">Esta aplicación solo lee los archivos de video de forma local. No sube ni recopila tus videos ni datos personales.</string>
+    <string name="version_entry">Versión</string>
+    <string name="version_format">Versión %1$s</string>
+    <string name="license_entry">Licencias de código abierto</string>
+    <string name="license_content">Este proyecto utiliza las siguientes bibliotecas de código abierto:\n\n· AndroidX\n· Material Components for Android\n· Media3 / ExoPlayer\n\nGracias a todos los colaboradores de código abierto.</string>
+    <string name="feedback_entry">Comentarios</string>
+    <string name="feedback_description">Si tienes algún problema, no dudes en contactar con el desarrollador en:</string>
+    <string name="feedback_email_hint">Mantén pulsada la dirección de correo para copiarla</string>
+    <string name="feedback_email">aaallthebest@outlook.com</string>
+    <string name="feedback_got_it">Entendido</string>
+    <string name="feedback_copied">Dirección de correo copiada</string>
+</resources>
